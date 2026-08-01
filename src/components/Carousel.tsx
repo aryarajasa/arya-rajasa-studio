@@ -1,7 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import { MutableRefObject, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { projectsList } from '../pages/Home';
+import { Project } from '../content';
 import GLImage from './GLImage';
 
 // Shared, mutable interaction state written by the wrapper (drag / wheel) and
@@ -14,6 +14,7 @@ export interface CarouselControl {
 }
 
 interface CarouselProps {
+  items: Project[]; // projects to lay around the ring, in order
   radius?: number; // ring radius (camera sits at the centre)
   repeat?: number; // how many times to cycle the project list around the ring
   aspect?: number; // tile width : height (tile height is derived from this)
@@ -22,6 +23,13 @@ interface CarouselProps {
   onActive?: (index: number) => void;
   onSliding?: (sliding: boolean) => void;
 }
+
+// A project added in the admin has no thumbnail until one is uploaded.
+// useTexture() throws on an empty URL and takes the whole <Canvas> down with
+// it, so missing images fall back to a flat placeholder tile — the same grey
+// the mobile list uses.
+const PLACEHOLDER_IMAGE =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="4" height="3"%3E%3Crect width="4" height="3" fill="%23e5e5e5"/%3E%3C/svg%3E';
 
 const FRICTION = 0.94;
 const SLIDING_THRESHOLD = 0.0015;
@@ -48,6 +56,7 @@ function createCurvedPlane(radius: number, arcAngle: number, height: number) {
 }
 
 const Carousel = ({
+  items,
   radius = 2,
   repeat = 2,
   aspect = 4 / 3,
@@ -59,9 +68,7 @@ const Carousel = ({
   const groupRef = useRef<THREE.Group>(null);
   const imageRefs = useRef<THREE.Mesh[]>([]);
 
-  // Read inside the component (not at module top-level) to avoid a circular
-  // import init error: Home → CarouselSlider → Carousel → Home.
-  const baseImages = useMemo(() => projectsList.map((p) => p.image), []);
+  const baseImages = useMemo(() => items.map((p) => p.image || PLACEHOLDER_IMAGE), [items]);
 
   // Cycle the project list `repeat` times to get more, smaller tiles.
   const images = useMemo(

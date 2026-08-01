@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
-import React, { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import React, { lazy, Suspense, useState } from 'react';
+import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
 import Loader from './components/Loader';
@@ -10,10 +10,26 @@ import Playbook from './pages/Playbook';
 import Project from './pages/Project';
 import { content } from './content';
 
+// The admin UI only works against the Vite dev server (it writes site.json
+// through dev-only middleware), so it is compiled out of production builds:
+// `import.meta.env.DEV` is statically false there, which lets Rollup drop the
+// branch and the dynamic import with it.
+const AdminApp = import.meta.env.DEV ? lazy(() => import('./admin/AdminApp')) : null;
+
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isCopied, setIsCopied] = useState(false);
+  const location = useLocation();
+
+  // Admin renders standalone — no site header, footer, cursor or loader.
+  if (AdminApp && location.pathname.startsWith('/admin')) {
+    return (
+      <Suspense fallback={<div className="p-8 text-neutral-400">loading editor…</div>}>
+        <AdminApp />
+      </Suspense>
+    );
+  }
 
   const handleCopyEmail = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -94,7 +110,9 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/story" element={<Story />} />
           <Route path="/playbook" element={<Playbook />} />
-          <Route path="/project" element={<Project />} />
+          <Route path="/project/:slug" element={<Project />} />
+          {/* Legacy single-project URL from before per-project pages. */}
+          <Route path="/project" element={<Navigate to="/" replace />} />
         </Routes>
 
         <footer className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-4 md:gap-16 px-6 md:px-8 lg:px-16 py-3 shrink-0 z-10 relative bg-white">

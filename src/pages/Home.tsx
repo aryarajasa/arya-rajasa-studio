@@ -2,66 +2,34 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import CarouselSlider from '../components/CarouselSlider';
-import { content, projectsList } from '../content';
+import { content, projectsList, Project } from '../content';
 
-export { projectsList };
-
-interface ProjectTitleProps {
-  originalText: string;
-  isRandomizing: boolean;
-}
-
-const TITLE_CHARS = "abcdefghijklmnopqrstuvwxyz0123456789©()[]{}<>@#$%&*+-=";
-
-export function ProjectTitle({ originalText, isRandomizing }: ProjectTitleProps) {
-  const [displayText, setDisplayText] = useState(originalText);
-
-  useEffect(() => {
-    if (!isRandomizing) {
-      setDisplayText(originalText);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      const randomized = originalText
-        .split("")
-        .map((char) => {
-          if (char === " ") return " ";
-          return TITLE_CHARS[Math.floor(Math.random() * TITLE_CHARS.length)];
-        })
-        .join("");
-      setDisplayText(randomized);
-    }, 80);
-
-    return () => clearInterval(interval);
-  }, [isRandomizing, originalText]);
-
-  return <span className="shrink-0">{displayText}</span>;
-}
-
-export function Slideshow({ items = projectsList }: { items?: any[] }) {
+export function Slideshow({ items = projectsList }: { items?: Project[] }) {
   const navigate = useNavigate();
 
   return (
     <>
       {/* Mobile Stacked View */}
       <div className="md:hidden flex flex-col px-6 gap-12 pt-8 pb-32">
-        {items.map((p, i) => (
-          <div 
-            key={i} 
+        {items.map((p) => (
+          <div
+            key={p.slug}
             className="w-full flex flex-col gap-4 select-none cursor-pointer"
-            onClick={() => navigate('/project')}
+            onClick={() => navigate(`/project/${p.slug}`)}
           >
             <div className="flex justify-between items-start gap-4">
               <span className="shrink-0">{p.name}</span>
               <span className="text-neutral-400 text-right">{p.details}</span>
             </div>
             <div className="w-full aspect-[4/3] bg-[#e5e5e5] rounded-[2px] overflow-hidden">
-              <img 
-                src={p.image} 
-                alt={p.name} 
-                className="w-full h-full object-cover" 
-              />
+              {/* A project with no thumbnail yet keeps the grey box. */}
+              {p.image && (
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
           </div>
         ))}
@@ -69,7 +37,7 @@ export function Slideshow({ items = projectsList }: { items?: any[] }) {
 
       {/* Desktop 3D Carousel View */}
       <div className="hidden md:block md:h-full">
-        <CarouselSlider />
+        <CarouselSlider items={items} />
       </div>
     </>
   );
@@ -85,7 +53,7 @@ export default function Home() {
         setShowScrollTop(scrollRef.current.scrollTop > 200);
       }
     };
-    
+
     const el = scrollRef.current;
     if (el) {
       el.addEventListener('scroll', handleScroll);
@@ -112,7 +80,7 @@ export default function Home() {
       </section>
 
       {showScrollTop && (
-        <button 
+        <button
           onClick={scrollToTop}
           className="md:hidden fixed bottom-6 right-6 mb-6 w-10 h-10 bg-neutral-900 text-white rounded-full flex items-center justify-center z-50 focus:outline-none"
         >

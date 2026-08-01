@@ -2,11 +2,13 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
+import adminApi from './src/admin/plugin';
 
 export default defineConfig(() => {
   return {
     base: '/arya-rajasa-studio/',
-    plugins: [react(), tailwindcss()],
+    // adminApi is `apply: 'serve'` — it adds no production output.
+    plugins: [react(), tailwindcss(), adminApi()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

@@ -3,7 +3,8 @@ import { useProgress } from '@react-three/drei';
 import React, { Suspense, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Carousel, { CarouselControl } from './Carousel';
-import { projectsList, ProjectTitle } from '../pages/Home';
+import ProjectTitle from './ProjectTitle';
+import { projectsList, Project } from '../content';
 
 // px → radians conversions for the two input modes (spin the ring).
 const DRAG_FACTOR = 0.006;
@@ -11,7 +12,7 @@ const WHEEL_FACTOR = 0.0015;
 // A pointer that moved less than this (px) counts as a click, not a drag.
 const CLICK_SLOP = 8;
 
-export default function CarouselSlider() {
+export default function CarouselSlider({ items = projectsList }: { items?: Project[] }) {
   const navigate = useNavigate();
 
   const control = useRef<CarouselControl>({
@@ -51,7 +52,11 @@ export default function CarouselSlider() {
     } catch {
       /* ignore */
     }
-    if (dragDistRef.current < CLICK_SLOP) navigate('/project');
+    // A click (rather than a drag) opens whichever project is front-and-centre.
+    if (dragDistRef.current < CLICK_SLOP) {
+      const target = items[activeIndex] ?? items[0];
+      if (target) navigate(`/project/${target.slug}`);
+    }
   };
 
   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -59,7 +64,11 @@ export default function CarouselSlider() {
     control.current.wheel += (e.deltaX + e.deltaY) * WHEEL_FACTOR;
   };
 
-  const active = projectsList[activeIndex] ?? projectsList[0];
+  const active = items[activeIndex] ?? items[0];
+
+  // The admin UI allows deleting every project; render nothing rather than
+  // building a ring with no textures.
+  if (!active) return null;
 
   return (
     <div
@@ -81,6 +90,7 @@ export default function CarouselSlider() {
       >
         <Suspense fallback={null}>
           <Carousel
+            items={items}
             radius={1.5}
             repeat={2}
             aspect={4 / 3}
