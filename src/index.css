@@ -5,8 +5,13 @@
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* The site hides the native cursor and draws its own (see CustomCursor).
+   The admin editor renders standalone without that component, and it is a
+   tool rather than a showpiece — it needs real cursors, including I-beams in
+   text fields. AdminApp marks the document while it is mounted so this rule
+   simply does not match there. */
 @media (pointer: fine) {
-  * {
+  html:not([data-admin]) * {
     cursor: none !important;
   }
 }

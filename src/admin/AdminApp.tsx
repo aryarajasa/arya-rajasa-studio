@@ -45,6 +45,13 @@ export default function AdminApp() {
     loadContent().then(setData, (e) => setLoadError(e.message));
   }, []);
 
+  // Opt out of the site's `cursor: none` while the editor is open — see the
+  // rule in index.css.
+  useEffect(() => {
+    document.documentElement.setAttribute('data-admin', '');
+    return () => document.documentElement.removeAttribute('data-admin');
+  }, []);
+
   const projects: Project[] = data?.projects ?? [];
   const selectedSlug = decodeURIComponent(location.pathname.replace(/^\/admin\/?/, ''));
   const selectedIndex = projects.findIndex((p) => p.slug === selectedSlug);
