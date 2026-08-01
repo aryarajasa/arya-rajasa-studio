@@ -106,14 +106,30 @@ export default function App() {
           </AnimatePresence>
         </header>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/story" element={<Story />} />
-          <Route path="/playbook" element={<Playbook />} />
-          <Route path="/project/:slug" element={<Project />} />
-          {/* Legacy single-project URL from before per-project pages. */}
-          <Route path="/project" element={<Navigate to="/" replace />} />
-        </Routes>
+        {/* Cross-fade between pages. `mode="wait"` lets the outgoing page
+            finish before the next one enters, and passing `location` into
+            Routes keeps the exiting copy rendering its own route instead of
+            snapping to the new one mid-exit. The wrapper carries the flex
+            sizing the pages expect from the shell. */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            className="flex-1 flex flex-col min-h-0"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4, ease: [0.65, 0, 0.35, 1] }}
+          >
+            <Routes location={location}>
+              <Route path="/" element={<Home />} />
+              <Route path="/story" element={<Story />} />
+              <Route path="/playbook" element={<Playbook />} />
+              <Route path="/project/:slug" element={<Project />} />
+              {/* Legacy single-project URL from before per-project pages. */}
+              <Route path="/project" element={<Navigate to="/" replace />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
 
         <footer className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-4 md:gap-16 px-6 md:px-8 lg:px-16 py-3 shrink-0 z-10 relative bg-white">
           <p className="hidden md:block select-none text-neutral-900">{content.site.copyright}</p>

@@ -8,7 +8,10 @@ const VISIBLE = 2;
 const DWELL_MS = 3000;
 // Length of the slide itself. Kept under DWELL_MS so one transition finishes
 // before the next is scheduled.
-const SLIDE_MS = 400;
+const SLIDE_MS = 1100;
+// Symmetric ease-in-out — the pair drifts up to speed and settles rather than
+// snapping at either end.
+const SLIDE_EASING = 'cubic-bezier(0.65, 0, 0.35, 1)';
 // Horizontal space between the two tiles, in px.
 const GAP = 16;
 
@@ -79,7 +82,7 @@ export default function ProjectSlider({ items = projectsList }: { items?: Projec
         style={{
           gap: GAP,
           transform: `translate3d(${-offset}px, 0, 0)`,
-          transition: animate ? `transform ${SLIDE_MS}ms cubic-bezier(0.85, 0, 0.15, 1)` : 'none',
+          transition: animate ? `transform ${SLIDE_MS}ms ${SLIDE_EASING}` : 'none',
         }}
       >
         {track.map((project, i) => (
