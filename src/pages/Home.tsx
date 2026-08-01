@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
-import CarouselSlider from '../components/CarouselSlider';
+import ProjectSlider from '../components/ProjectSlider';
 import { content, projectsList, Project } from '../content';
 
 export function Slideshow({ items = projectsList }: { items?: Project[] }) {
@@ -35,9 +35,9 @@ export function Slideshow({ items = projectsList }: { items?: Project[] }) {
         ))}
       </div>
 
-      {/* Desktop 3D Carousel View */}
-      <div className="hidden md:block md:h-full">
-        <CarouselSlider items={items} />
+      {/* Desktop two-up auto-sliding view */}
+      <div className="hidden md:block md:h-full px-8 lg:px-16">
+        <ProjectSlider items={items} />
       </div>
     </>
   );
