@@ -18,13 +18,6 @@ the GitHub Pages base — it is part of the URL in dev too).
 All site content lives in [`src/content/site.json`](src/content/site.json).
 Nothing user-facing is hardcoded in components.
 
-Projects are edited through a visual editor that runs **only on the dev server**:
-
-```bash
-npm run dev
-```
-
-then open **http://localhost:3000/arya-rajasa-studio/admin**
 
 From there you can:
 
