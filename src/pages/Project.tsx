@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import { Slideshow } from './Home';
 import { content, findProject, projectsList, Block } from '../content';
 
@@ -87,6 +87,11 @@ export default function Project() {
   // "more projects" should show the others, not the one already open.
   const others = projectsList.filter((p) => p.slug !== project.slug);
 
+  const liveSiteValue = caseStudy.meta.liveSite?.trim();
+  const hasLiveSiteUrl = Boolean(
+    liveSiteValue && liveSiteValue !== '' && liveSiteValue.toUpperCase() !== 'TBA'
+  );
+
   return (
     <main ref={scrollRef} className="flex-1 overflow-y-auto relative bg-white pb-32">
       <div className="px-6 md:px-8 lg:px-16 pt-24 md:pt-32">
@@ -99,11 +104,13 @@ export default function Project() {
             <p className="text-neutral-400">{caseStudy.label}</p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 w-full md:w-auto">
+          {/* Metadata Grid with Live Site between Industry and Year */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-12 w-full md:w-auto">
             <div className="flex flex-col gap-1">
               <span className="text-neutral-400">company</span>
               <span className="text-neutral-900">{caseStudy.meta.company}</span>
             </div>
+
             <div className="flex flex-col gap-1">
               <span className="text-neutral-400">services</span>
               <div className="flex flex-col text-neutral-900">
@@ -112,10 +119,31 @@ export default function Project() {
                 ))}
               </div>
             </div>
+
             <div className="flex flex-col gap-1">
               <span className="text-neutral-400">industry</span>
               <span className="text-neutral-900">{caseStudy.meta.industry}</span>
             </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-neutral-400">live site</span>
+              {hasLiveSiteUrl && liveSiteValue ? (
+                <a
+                  href={liveSiteValue.startsWith('http') ? liveSiteValue : `https://${liveSiteValue}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-900 hover:text-neutral-500 transition-colors inline-flex items-center gap-0.5"
+                >
+                  <span className="truncate max-w-[120px]">
+                    {liveSiteValue.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                  </span>
+                  <ArrowUpRight size={11} strokeWidth={1.5} className="shrink-0" />
+                </a>
+              ) : (
+                <span className="text-neutral-900">TBA</span>
+              )}
+            </div>
+
             <div className="flex flex-col gap-1">
               <span className="text-neutral-400">year</span>
               <span className="text-neutral-900">{caseStudy.meta.year}</span>
@@ -131,13 +159,15 @@ export default function Project() {
           ))}
         </div>
 
-        {/* More Projects */}
+        {/* More Projects Section with Consistent Height */}
         {others.length > 0 && (
-          <div className="mt-32 -mx-6 md:-mx-8 lg:-mx-16">
-            <div className="px-6 md:px-8 lg:px-16 mb-8">
+          <div className="mt-32 -mx-6 md:-mx-8 lg:-mx-16 flex flex-col gap-8">
+            <div className="px-6 md:px-8 lg:px-16">
               <p className="text-neutral-900">{content.projectPage.moreProjectsLabel}</p>
             </div>
-            <Slideshow items={others} />
+            <div className="w-full h-[420px] md:h-[480px] lg:h-[520px]">
+              <Slideshow items={others} />
+            </div>
           </div>
         )}
       </div>

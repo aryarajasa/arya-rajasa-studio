@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'motion/react';
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Moon, Sun } from 'lucide-react';
 import CustomCursor from './components/CustomCursor';
 import Loader from './components/Loader';
+import Logo from './components/Logo';
 import Home from './pages/Home';
 import Story from './pages/Story';
 import Playbook from './pages/Playbook';
@@ -18,9 +19,64 @@ const AdminApp = import.meta.env.DEV ? lazy(() => import('./admin/AdminApp')) : 
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // Show loading screen only on the user's first visit per session
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const hasVisited = window.sessionStorage.getItem('arya-visited');
+      return !hasVisited;
+    } catch {
+      return true;
+    }
+  });
   const [isCopied, setIsCopied] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const savedTheme = window.localStorage.getItem('arya-theme');
+    return savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
   const location = useLocation();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    window.localStorage.setItem('arya-theme', isDarkMode ? 'dark' : 'light');
+
+    // Dynamically update favicon based on active theme
+    const faviconEl = document.getElementById('favicon') as HTMLLinkElement | null;
+    if (faviconEl) {
+      faviconEl.href = `${import.meta.env.BASE_URL}favicon-${isDarkMode ? 'dark' : 'light'}.png`;
+    }
+  }, [isDarkMode]);
+
+  // Global scroll detector across any scrollable <main> or window container
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement | Document;
+      const scrollTop =
+        target instanceof HTMLElement
+          ? target.scrollTop
+          : window.scrollY || document.documentElement.scrollTop || 0;
+      setIsScrolled(scrollTop > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll, { capture: true, passive: true });
+    return () => window.removeEventListener('scroll', handleScroll, { capture: true });
+  }, []);
+
+  // Reset scroll state when navigating between routes
+  useEffect(() => {
+    setIsScrolled(false);
+  }, [location.pathname]);
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+    try {
+      window.sessionStorage.setItem('arya-visited', 'true');
+    } catch {
+      // Ignore storage errors in restricted contexts
+    }
+  };
 
   // Admin renders standalone — no site header, footer, cursor or loader.
   if (AdminApp && location.pathname.startsWith('/admin')) {
@@ -38,43 +94,59 @@ export default function App() {
     setTimeout(() => setIsCopied(false), 1000);
   };
 
+  const toggleTheme = () => setIsDarkMode((current) => !current);
+
   return (
     <>
       <AnimatePresence mode="wait">
         {isLoading && (
-          <Loader key="loader" onComplete={() => setIsLoading(false)} />
+          <Loader key="loader" onComplete={handleLoaderComplete} />
         )}
       </AnimatePresence>
 
       <div className="h-[100dvh] flex flex-col justify-between overflow-hidden">
         <CustomCursor />
         
-        <header className="flex flex-col md:flex-row justify-between items-center md:gap-16 px-6 md:px-8 lg:px-16 pt-[18px] pb-3 shrink-0">
-          <div className="flex w-full md:w-auto justify-between items-center z-50 relative">
-            <div className="flex flex-col gap-[2px]">
-              <Link to="/" className="select-none hover:text-neutral-500 transition-colors">
-                <h1>{content.site.title}</h1>
-              </Link>
-              <p className="text-neutral-400 select-none">{content.site.role}</p>
-            </div>
-            <div className="flex items-center">
-              <button 
-                className="md:hidden text-neutral-900 select-none z-50 relative focus:outline-none" 
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? 'close' : 'menu'}
-              </button>
-            </div>
+        <header className={`px-6 md:px-8 lg:px-16 transition-all duration-300 shrink-0 z-30 ${isScrolled ? 'pt-2 pb-1.5' : 'pt-[18px] pb-3'}`}>
+          {/* Mobile Header */}
+          <div className="flex md:hidden w-full justify-between items-center z-50 relative">
+            <div className="w-8" />
+            <Logo isScrolled={isScrolled} />
+            <button 
+              className="text-neutral-900 select-none z-50 relative focus:outline-none" 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? 'close' : 'menu'}
+            </button>
           </div>
 
-          <nav className="hidden md:flex flex-wrap items-center gap-8 md:gap-16">
-            <Link to="/story" className="hover:text-neutral-500 transition-colors">story</Link>
-            <a href="#" className="hover:text-neutral-500 transition-colors">designs</a>
-            <Link to="/playbook" className="hover:text-neutral-500 transition-colors">playbook</Link>
-            <a href="#" onClick={handleCopyEmail} className="flex items-center gap-1 hover:text-neutral-500 transition-colors">
-              {isCopied ? "email copied!" : "contact"} {!isCopied && <ArrowUpRight size={12} strokeWidth={1.5} />}
-            </a>
-          </nav>
+          {/* Desktop Header */}
+          <div className="hidden md:grid grid-cols-3 items-center w-full">
+            <nav className="flex items-center gap-8 md:gap-16 justify-start">
+              <Link to="/story" className="hover:text-neutral-500 transition-colors">story</Link>
+              <a href="#" className="hover:text-neutral-500 transition-colors">designs</a>
+            </nav>
+
+            <div className="flex justify-center items-center">
+              <Logo isScrolled={isScrolled} />
+            </div>
+
+            <nav className="flex items-center gap-8 md:gap-16 justify-end">
+              <Link to="/playbook" className="hover:text-neutral-500 transition-colors">playbook</Link>
+              <a href="#" onClick={handleCopyEmail} className="flex items-center gap-1 hover:text-neutral-500 transition-colors">
+                {isCopied ? "email copied!" : "contact"} {!isCopied && <ArrowUpRight size={12} strokeWidth={1.5} />}
+              </a>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="text-neutral-900 hover:text-neutral-500 transition-colors focus:outline-none cursor-pointer"
+              >
+                {isDarkMode ? <Sun size={13} strokeWidth={1.5} /> : <Moon size={13} strokeWidth={1.5} />}
+              </button>
+            </nav>
+          </div>
 
           <AnimatePresence>
             {isMenuOpen && (
@@ -99,6 +171,17 @@ export default function App() {
                     <a href="#" onClick={(e) => { handleCopyEmail(e); setTimeout(() => setIsMenuOpen(false), 1000); }} className="flex items-center gap-1 hover:text-neutral-500 transition-colors">
                       {isCopied ? "email copied!" : "contact"} {!isCopied && <ArrowUpRight size={12} strokeWidth={1.5} />}
                     </a>
+                  </motion.div>
+                  <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+                    <button
+                      type="button"
+                      onClick={toggleTheme}
+                      aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                      className="flex items-center gap-2 hover:text-neutral-500 transition-colors focus:outline-none"
+                    >
+                      {isDarkMode ? <Sun size={13} strokeWidth={1.5} /> : <Moon size={13} strokeWidth={1.5} />}
+                      {isDarkMode ? 'light mode' : 'dark mode'}
+                    </button>
                   </motion.div>
                 </div>
               </motion.div>

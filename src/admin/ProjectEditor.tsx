@@ -179,7 +179,7 @@ export default function ProjectEditor({
           </Field>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-5 gap-4">
           <Field label="company">
             <TextInput
               value={caseStudy.meta.company}
@@ -197,6 +197,12 @@ export default function ProjectEditor({
             <TextInput
               value={caseStudy.meta.industry}
               onChange={(industry) => patchCase({ meta: { ...caseStudy.meta, industry } })}
+            />
+          </Field>
+          <Field label="live site" hint="optional url, shows TBA if empty">
+            <TextInput
+              value={caseStudy.meta.liveSite || ''}
+              onChange={(liveSite) => patchCase({ meta: { ...caseStudy.meta, liveSite } })}
             />
           </Field>
           <Field label="year">

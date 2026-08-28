@@ -10,7 +10,7 @@ export function Slideshow({ items = projectsList }: { items?: Project[] }) {
   return (
     <>
       {/* Mobile Stacked View */}
-      <div className="md:hidden flex flex-col px-6 gap-12 pt-8 pb-32">
+      <div className="md:hidden flex flex-col px-6 gap-16 pt-8 pb-32">
         {items.map((p) => (
           <div
             key={p.slug}

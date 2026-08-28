@@ -5,6 +5,23 @@
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
+:root {
+  --site-bg: #ffffff;
+  --site-text: #1a1a1a;
+  --site-muted: #a3a3a3;
+  --site-soft: #f5f5f5;
+  --site-border: #e5e5e5;
+}
+
+html.dark {
+  color-scheme: dark;
+  --site-bg: #000000;
+  --site-text: #f5f5f5;
+  --site-muted: #8f8f8f;
+  --site-soft: #121212;
+  --site-border: #222222;
+}
+
 /* The site hides the native cursor and draws its own (see CustomCursor).
    The admin editor renders standalone without that component, and it is a
    tool rather than a showpiece — it needs real cursors, including I-beams in
@@ -18,10 +35,53 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: #ffffff;
-  color: #1a1a1a;
+  background-color: var(--site-bg);
+  color: var(--site-text);
   font-size: 12px;
   line-height: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 240ms ease, color 240ms ease;
+}
+
+.ascii-logo {
+  margin: 0;
+  color: var(--site-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 500;
+  font-size: 3.5px;
+  line-height: 3.5px;
+  letter-spacing: 0;
+  white-space: pre;
+  transition: color 240ms ease;
+}
+
+@media (min-width: 768px) {
+  .ascii-logo {
+    font-size: 4.25px;
+    line-height: 4.25px;
+  }
+}
+
+html.dark .bg-white {
+  background-color: var(--site-bg) !important;
+}
+
+html.dark .text-neutral-900 {
+  color: var(--site-text) !important;
+}
+
+html.dark .text-neutral-400 {
+  color: var(--site-muted) !important;
+}
+
+html.dark .bg-neutral-50,
+html.dark .bg-neutral-100,
+html.dark .bg-\[\#e5e5e5\] {
+  background-color: var(--site-soft) !important;
+}
+
+html.dark .border-neutral-200,
+html.dark .border-neutral-300 {
+  border-color: var(--site-border) !important;
 }

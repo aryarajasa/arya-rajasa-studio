@@ -31,6 +31,7 @@ export interface CaseStudy {
     company: string;
     services: string[];
     industry: string;
+    liveSite?: string;
     year: string;
   };
   hero: string;
