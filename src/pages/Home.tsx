@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import ProjectSlider from '../components/ProjectSlider';
+import SEO from '../components/SEO';
 import { content, projectsList, Project } from '../content';
 
 export function Slideshow({ items = projectsList }: { items?: Project[] }) {
@@ -69,6 +70,9 @@ export default function Home() {
 
   return (
     <main ref={scrollRef} className="flex-1 flex flex-col min-h-0 relative overflow-y-auto md:overflow-hidden">
+      <SEO
+        description={content.home.intro}
+      />
       <section className="px-6 md:px-8 lg:px-16 max-w-[480px] mt-[5vh] md:mt-[10vh] shrink-0">
         <p className="select-none">
           {content.home.intro}

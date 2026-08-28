@@ -1,0 +1,7 @@
+# robots.txt for Arya Rajasa Studio
+User-agent: *
+Allow: /
+Disallow: /admin
+
+# Sitemap URL
+Sitemap: https://aryarajasa.github.io/arya-rajasa-studio/sitemap.xml

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import { Slideshow } from './Home';
+import SEO from '../components/SEO';
 import { content, findProject, projectsList, Block } from '../content';
 
 // Images are optional while a project is still being filled in, and an <img>
@@ -92,8 +93,17 @@ export default function Project() {
     liveSiteValue && liveSiteValue !== '' && liveSiteValue.toUpperCase() !== 'TBA'
   );
 
+  const projectDescription =
+    caseStudy.intro || `${project.name} ${project.details} — Brand design case study by Arya Rajasa Studio.`;
+
   return (
     <main ref={scrollRef} className="flex-1 overflow-y-auto relative bg-white pb-32">
+      <SEO
+        title={project.name}
+        description={projectDescription}
+        image={caseStudy.hero || project.image}
+        type="article"
+      />
       <div className="px-6 md:px-8 lg:px-16 pt-24 md:pt-32">
         {/* Top Section */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-32 mb-16 md:mb-24">
