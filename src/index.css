@@ -1,48 +1,7 @@
 @import "tailwindcss";
 
-/* Helvetica LT Pro Typeface Declarations */
-@font-face {
-  font-family: "Helvetica LT Pro";
-  src: local("Helvetica LT Pro"),
-       local("HelveticaLTPro-Roman"),
-       local("Helvetica Neue LT Pro 55 Roman"),
-       local("HelveticaNeueLTPro-Roman"),
-       local("Helvetica LT Std"),
-       local("Helvetica Neue"),
-       local("Helvetica");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Helvetica LT Pro";
-  src: local("Helvetica LT Pro Medium"),
-       local("HelveticaLTPro-Medium"),
-       local("Helvetica Neue LT Pro 65 Medium"),
-       local("HelveticaNeueLTPro-Md"),
-       local("Helvetica Neue Medium"),
-       local("Helvetica-Medium");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Helvetica LT Pro";
-  src: local("Helvetica LT Pro Bold"),
-       local("HelveticaLTPro-Bold"),
-       local("Helvetica Neue LT Pro 75 Bold"),
-       local("HelveticaNeueLTPro-Bd"),
-       local("Helvetica Neue Bold"),
-       local("Helvetica-Bold");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme {
-  --font-sans: "Helvetica LT Pro", "Helvetica Neue LT Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
