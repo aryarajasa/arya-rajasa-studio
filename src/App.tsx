@@ -98,11 +98,9 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {isLoading && (
-          <Loader key="loader" onComplete={handleLoaderComplete} />
-        )}
-      </AnimatePresence>
+      {isLoading && (
+        <Loader onComplete={handleLoaderComplete} />
+      )}
 
       <div className="h-[100dvh] flex flex-col justify-between overflow-hidden">
         <CustomCursor />

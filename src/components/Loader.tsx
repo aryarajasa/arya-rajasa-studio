@@ -1,53 +1,20 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 
 interface LoaderProps {
   onComplete: () => void;
-  key?: string;
 }
 
 // High-density tonal character ramp for video rendering
 const ASCII_RAMP = "  ..::--==++**##%%@@88&&WW";
 
-interface SpreadParticle {
-  id: number;
-  char: string;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  rot: number;
-  fontSize: number;
-}
-
 export default function Loader({ onComplete }: LoaderProps) {
   const [asciiFrame, setAsciiFrame] = useState<string>('');
   const [progress, setProgress] = useState(0);
-  const [isSpreading, setIsSpreading] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const hasFinishedRef = useRef(false);
-
-  // Generate radial spreading ASCII particles on exit (no blur, pure crisp fade)
-  const spreadParticles: SpreadParticle[] = useMemo(() => {
-    const chars = ['W', '&', '@', '#', '%', '*', '+', '=', '8', 'S', '$', '§', 'x', 's', 'o', 'v'];
-    return Array.from({ length: 80 }, (_, i) => {
-      const angle = (i / 80) * 2 * Math.PI + (Math.random() - 0.5) * 0.3;
-      const speed = 160 + Math.random() * 300;
-      return {
-        id: i,
-        char: chars[Math.floor(Math.random() * chars.length)],
-        x: 50 + (Math.random() - 0.5) * 16,
-        y: 50 + (Math.random() - 0.5) * 16,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        rot: (Math.random() - 0.5) * 360,
-        fontSize: Math.floor(Math.random() * 6) + 10,
-      };
-    });
-  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -60,6 +27,13 @@ export default function Loader({ onComplete }: LoaderProps) {
 
     const ASCII_WIDTH = 64; // Monospace character width
     const CHAR_ASPECT = 0.52; // Height adjustment for non-square characters
+
+    const finish = () => {
+      if (hasFinishedRef.current) return;
+      hasFinishedRef.current = true;
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      onComplete();
+    };
 
     const renderLoop = () => {
       if (video && !video.paused && !video.ended && ctx) {
@@ -112,32 +86,21 @@ export default function Loader({ onComplete }: LoaderProps) {
       }
     };
 
-    const triggerSpread = () => {
-      if (hasFinishedRef.current) return;
-      hasFinishedRef.current = true;
-      setProgress(100);
-      setIsSpreading(true);
-
-      setTimeout(() => {
-        onComplete();
-      }, 850);
-    };
-
     video.addEventListener('play', () => {
       renderLoop();
     });
 
     video.addEventListener('ended', () => {
-      triggerSpread();
+      finish();
     });
 
     // Fallback timer if video is stalled
     const fallbackTimer = setTimeout(() => {
-      triggerSpread();
-    }, 4800);
+      finish();
+    }, 4200);
 
     video.play().catch(() => {
-      setTimeout(triggerSpread, 2000);
+      finish();
     });
 
     return () => {
@@ -147,12 +110,7 @@ export default function Loader({ onComplete }: LoaderProps) {
   }, [onComplete]);
 
   return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      animate={{ opacity: isSpreading ? 0 : 1 }}
-      transition={{ duration: 0.8, delay: 0.05, ease: 'easeOut' }}
-      className="fixed inset-0 z-[9999] pointer-events-auto select-none overflow-hidden bg-black font-mono flex flex-col items-center justify-center"
-    >
+    <div className="fixed inset-0 z-[9999] pointer-events-auto select-none overflow-hidden bg-black font-mono flex flex-col items-center justify-center">
       {/* Hidden Video Source */}
       <video
         ref={videoRef}
@@ -164,76 +122,18 @@ export default function Loader({ onComplete }: LoaderProps) {
         className="hidden"
       />
 
-      {/* Main ASCII Video Matrix Container with Crisp Opacity Fade & Expansion (No Blur) */}
-      <motion.div
-        animate={
-          isSpreading
-            ? {
-                scale: 1.45,
-                opacity: 0,
-                letterSpacing: '0.35em',
-              }
-            : {
-                scale: 1,
-                opacity: 1,
-                letterSpacing: '0em',
-              }
-        }
-        transition={{
-          duration: 0.8,
-          ease: [0.25, 1, 0.5, 1],
-        }}
-        className="relative flex flex-col items-center justify-center max-w-full max-h-full p-4"
-      >
+      {/* Main ASCII Video Matrix Container */}
+      <div className="relative flex flex-col items-center justify-center max-w-full max-h-full p-4">
         <pre className="text-[6.5px] sm:text-[8px] md:text-[9.5px] lg:text-[11px] leading-[6.5px] sm:leading-[8px] md:leading-[9.5px] lg:leading-[11px] text-white tracking-tight font-medium select-none whitespace-pre text-center">
           {asciiFrame}
         </pre>
 
         {/* Loading text and 0-100% counter below the ASCII doves */}
-        <motion.div
-          animate={{ opacity: isSpreading ? 0 : 1 }}
-          transition={{ duration: 0.3 }}
-          className="mt-4 flex items-center justify-center gap-3 text-neutral-400 font-mono text-[11px] md:text-[12px] tracking-wider select-none"
-        >
+        <div className="mt-4 flex items-center justify-center gap-3 text-neutral-400 font-mono text-[11px] md:text-[12px] tracking-wider select-none">
           <span className="uppercase tracking-widest text-neutral-400">loading...</span>
           <span className="text-white font-medium min-w-[3ch] text-left">{progress}%</span>
-        </motion.div>
-      </motion.div>
-
-      {/* Radial Spreading ASCII Shards (Crisp, No Blur, Opacity Fade) */}
-      <AnimatePresence>
-        {isSpreading && (
-          <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
-            {spreadParticles.map((pt) => (
-              <motion.span
-                key={pt.id}
-                initial={{
-                  left: `${pt.x}%`,
-                  top: `${pt.y}%`,
-                  opacity: 1,
-                  scale: 1,
-                  rotate: 0,
-                }}
-                animate={{
-                  x: pt.vx,
-                  y: pt.vy,
-                  opacity: 0,
-                  scale: 1.4,
-                  rotate: pt.rot,
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                style={{ fontSize: `${pt.fontSize}px` }}
-                className="absolute font-mono text-white select-none pointer-events-none"
-              >
-                {pt.char}
-              </motion.span>
-            ))}
-          </div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+        </div>
+      </div>
+    </div>
   );
 }
