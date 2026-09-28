@@ -29,7 +29,7 @@
     {
       "slug": "aura-botanical",
       "name": "aura botanical",
-      "details": "( brand design/ packaging )",
+      "details": "( brand design / packaging )",
       "image": "/images/e2824074967786b7ca1d1699bcf70826-1783134491063.webp",
       "caseStudy": {
         "intro": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at.",
@@ -100,7 +100,7 @@
     {
       "slug": "voyage-coffee",
       "name": "voyage coffee",
-      "details": "( brand design/ art direction )",
+      "details": "( brand design / art direction )",
       "image": "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&q=80&w=800",
       "caseStudy": {
         "intro": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at.",
@@ -171,7 +171,7 @@
     {
       "slug": "neu-studio",
       "name": "neu studio",
-      "details": "( motion design/ web )",
+      "details": "( motion design / web )",
       "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&q=80&w=800",
       "caseStudy": {
         "intro": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at.",
@@ -242,7 +242,7 @@
     {
       "slug": "verve-active",
       "name": "verve active",
-      "details": "( brand design/ apparel )",
+      "details": "( brand design / apparel )",
       "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800",
       "caseStudy": {
         "intro": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at.",
@@ -451,12 +451,30 @@
           }
         ]
       }
+    },
+    {
+      "slug": "new-project",
+      "name": "new project",
+      "details": "",
+      "image": "",
+      "caseStudy": {
+        "intro": "",
+        "label": "case study",
+        "meta": {
+          "company": "",
+          "services": [],
+          "industry": "",
+          "year": "2026"
+        },
+        "hero": "",
+        "blocks": []
+      }
     }
   ],
   "story": {
     "portrait": "/images/profile.jpg",
     "paragraphs": [
-      "A brand designer based in Canggu, Bali.",
+      "I'm Arya, a brand designer based in Canggu, Bali.",
       "For the past 10 years, I’ve helped businesses, startups, and growing brands build identities that actually mean something. Not just logos that look nice — but brand systems that feel intentional and built to last.",
       "My work focuses on crafting distinctive visual identities, from logo design to complete brand systems and supporting graphics. Whether it's a new startup finding its voice or a local café refining its presence, I translate ideas into visuals that connect and create impact. I believe strong branding is clarity. It communicates who you are, what you stand for, and why people should care. That's what I help businesses define and design.",
       "I'm always curious and love what I do."
