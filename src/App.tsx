@@ -6,6 +6,7 @@ import CustomCursor from './components/CustomCursor';
 import Loader from './components/Loader';
 import Logo from './components/Logo';
 import Home from './pages/Home';
+import Designs from './pages/Designs';
 import Story from './pages/Story';
 import Playbook from './pages/Playbook';
 import Project from './pages/Project';
@@ -122,7 +123,7 @@ export default function App() {
           <div className="hidden md:grid grid-cols-3 items-center w-full">
             <nav className="flex items-center gap-8 md:gap-16 justify-start">
               <Link to="/story" className="hover:text-neutral-500 transition-colors">story</Link>
-              <a href="#" className="hover:text-neutral-500 transition-colors">designs</a>
+              <Link to="/designs" className="hover:text-neutral-500 transition-colors">designs</Link>
             </nav>
 
             <div className="flex justify-center items-center">
@@ -160,7 +161,7 @@ export default function App() {
                     <Link to="/story" className="hover:text-neutral-500 transition-colors" onClick={() => setIsMenuOpen(false)}>story</Link>
                   </motion.div>
                   <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-                    <a href="#" className="hover:text-neutral-500 transition-colors" onClick={() => setIsMenuOpen(false)}>designs</a>
+                    <Link to="/designs" className="hover:text-neutral-500 transition-colors" onClick={() => setIsMenuOpen(false)}>designs</Link>
                   </motion.div>
                   <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}>
                     <Link to="/playbook" className="hover:text-neutral-500 transition-colors" onClick={() => setIsMenuOpen(false)}>playbook</Link>
@@ -203,6 +204,7 @@ export default function App() {
           >
             <Routes location={location}>
               <Route path="/" element={<Home />} />
+              <Route path="/designs" element={<Designs />} />
               <Route path="/story" element={<Story />} />
               <Route path="/playbook" element={<Playbook />} />
               <Route path="/project/:slug" element={<Project />} />

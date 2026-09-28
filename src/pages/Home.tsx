@@ -5,14 +5,16 @@ import ProjectSlider from '../components/ProjectSlider';
 import SEO from '../components/SEO';
 import { content, projectsList, Project } from '../content';
 
-export function Slideshow({ items = projectsList }: { items?: Project[] }) {
+export function Slideshow({ items }: { items?: Project[] }) {
   const navigate = useNavigate();
+  // Default to 5 most recent projects on homepage
+  const displayItems = items ?? projectsList.slice(0, 5);
 
   return (
     <>
       {/* Mobile Stacked View */}
       <div className="md:hidden flex flex-col px-6 gap-16 pt-8 pb-32">
-        {items.map((p) => (
+        {displayItems.map((p) => (
           <div
             key={p.slug}
             className="w-full flex flex-col gap-4 select-none cursor-pointer"
@@ -38,7 +40,7 @@ export function Slideshow({ items = projectsList }: { items?: Project[] }) {
 
       {/* Desktop two-up auto-sliding view */}
       <div className="hidden md:block md:h-full px-8 lg:px-16">
-        <ProjectSlider items={items} />
+        <ProjectSlider items={displayItems} />
       </div>
     </>
   );
@@ -47,6 +49,7 @@ export function Slideshow({ items = projectsList }: { items?: Project[] }) {
 export default function Home() {
   const scrollRef = useRef<HTMLElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const recentProjects = projectsList.slice(0, 5);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,7 +83,7 @@ export default function Home() {
       </section>
 
       <section className="w-full max-md:mt-8 max-md:mb-4 max-md:pb-16 max-md:shrink-0 md:flex-1 md:min-h-0 md:mt-6">
-        <Slideshow />
+        <Slideshow items={recentProjects} />
       </section>
 
       {showScrollTop && (
