@@ -22,8 +22,22 @@ const DEFAULT_DESCRIPTION =
 const DEFAULT_KEYWORDS =
   'Arya Rajasa, Arya Rajasa Studio, brand designer, visual identity, brand identity, logo design, Canggu, Bali brand designer, graphic design, packaging design, editorial design, art direction, Bali design studio';
 const SITE_NAME = 'arya rajasa studio';
-const BASE_DOMAIN = 'https://aryarajasa.github.io/arya-rajasa-studio';
-const DEFAULT_IMAGE = `${BASE_DOMAIN}/og-image.png`;
+const DEFAULT_SITE_DOMAIN = 'https://aryarajasa.github.io/arya-rajasa-studio';
+
+const getBaseDomain = () => {
+  if (import.meta.env.VITE_SITE_URL) return import.meta.env.VITE_SITE_URL.replace(/\/$/, '');
+  if (
+    typeof window !== 'undefined' &&
+    window.location.hostname !== 'localhost' &&
+    !window.location.hostname.includes('127.0.0.1')
+  ) {
+    const isGhPages = window.location.hostname.endsWith('github.io');
+    return isGhPages
+      ? `${window.location.origin}/arya-rajasa-studio`
+      : window.location.origin.replace(/\/$/, '');
+  }
+  return DEFAULT_SITE_DOMAIN;
+};
 
 export default function SEO({
   title,
@@ -36,16 +50,18 @@ export default function SEO({
 }: SEOProps) {
   const location = useLocation();
   const fullTitle = title ? `${title} — ${SITE_NAME}` : DEFAULT_TITLE;
+  const baseDomain = getBaseDomain();
+  const defaultImage = `${baseDomain}/og-image.png`;
   
   // Clean canonical URL without trailing slash issues (except root)
   const path = location.pathname.startsWith('/') ? location.pathname : `/${location.pathname}`;
-  const canonicalUrl = `${BASE_DOMAIN}${path === '/' ? '/' : path}`;
+  const canonicalUrl = `${baseDomain}${path === '/' ? '/' : path}`;
   
   const metaImage = image?.startsWith('http')
     ? image
     : image
-    ? `${BASE_DOMAIN}${image.startsWith('/') ? '' : '/'}${image}`
-    : DEFAULT_IMAGE;
+    ? `${baseDomain}${image.startsWith('/') ? '' : '/'}${image}`
+    : defaultImage;
 
   useEffect(() => {
     // 1. Document Title
@@ -96,8 +112,8 @@ export default function SEO({
     const graph: any[] = [
       {
         '@type': 'WebSite',
-        '@id': `${BASE_DOMAIN}/#website`,
-        url: `${BASE_DOMAIN}/`,
+        '@id': `${baseDomain}/#website`,
+        url: `${baseDomain}/`,
         name: SITE_NAME,
         inLanguage: 'en-US',
       },
@@ -110,7 +126,7 @@ export default function SEO({
           '@type': 'ListItem',
           position: index + 1,
           name: crumb.name,
-          item: crumb.url.startsWith('http') ? crumb.url : `${BASE_DOMAIN}${crumb.url.startsWith('/') ? '' : '/'}${crumb.url}`,
+          item: crumb.url.startsWith('http') ? crumb.url : `${baseDomain}${crumb.url.startsWith('/') ? '' : '/'}${crumb.url}`,
         })),
       });
     }
@@ -122,7 +138,7 @@ export default function SEO({
         publisher: {
           '@type': 'Organization',
           name: SITE_NAME,
-          url: `${BASE_DOMAIN}/`,
+          url: `${baseDomain}/`,
         },
       });
     }

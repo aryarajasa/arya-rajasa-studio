@@ -27,8 +27,11 @@ function spaFallback(): Plugin {
 }
 
 export default defineConfig(() => {
+  const isVercel = Boolean(process.env.VERCEL);
+  const base = isVercel ? '/' : (process.env.VITE_BASE_PATH ?? '/arya-rajasa-studio/');
+
   return {
-    base: '/arya-rajasa-studio/',
+    base,
     // adminApi is `apply: 'serve'` — it adds no production output.
     plugins: [react(), tailwindcss(), adminApi(), spaFallback()],
     resolve: {
