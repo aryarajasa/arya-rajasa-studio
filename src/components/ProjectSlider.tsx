@@ -194,7 +194,7 @@ export default function ProjectSlider({ items = projectsList }: { items?: Projec
               {project.image && (
                 <img
                   src={project.image}
-                  alt={project.name}
+                  alt={`${project.name} — ${project.details.replace(/[()]/g, '').trim() || 'Brand Design Visual System'}`}
                   className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
                   draggable={false}
                 />

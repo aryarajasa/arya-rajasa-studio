@@ -9,18 +9,29 @@ export default function Story() {
   return (
     <main className="flex-1 px-6 md:px-8 lg:px-16 mt-[5vh] md:mt-[10vh] overflow-y-auto w-full">
       <SEO
-        title="story"
+        title="story & about"
         description={storyDescription}
         image={story.portrait}
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Story', url: '/story' },
+        ]}
+        schema={{
+          '@type': 'AboutPage',
+          name: 'About Arya Rajasa — Brand Designer in Canggu, Bali',
+          description: storyDescription,
+        }}
       />
+      <h1 className="sr-only">About Arya Rajasa — Brand Designer based in Canggu, Bali</h1>
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 lg:gap-32 pb-16">
 
         {/* Left Column: Image */}
         <div className="w-full">
           <img
             src={story.portrait}
-            alt="Portrait"
+            alt="Arya Rajasa — Brand Designer based in Canggu, Bali"
             className="w-full aspect-square object-cover grayscale"
+            loading="lazy"
           />
         </div>
 

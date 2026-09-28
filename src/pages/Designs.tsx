@@ -91,9 +91,19 @@ export default function Designs() {
       className="flex-1 px-6 md:px-8 lg:px-16 pt-3 md:pt-4 overflow-y-auto w-full pb-32"
     >
       <SEO
-        title="designs"
+        title="designs archive"
         description="Comprehensive archive of all brand identities, visual systems, and graphic design projects by Arya Rajasa Studio."
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Designs', url: '/designs' },
+        ]}
+        schema={{
+          '@type': 'CollectionPage',
+          name: 'Designs Archive — Arya Rajasa Studio',
+          description: 'Comprehensive archive of all brand identities, visual systems, and graphic design projects by Arya Rajasa Studio.',
+        }}
       />
+      <h1 className="sr-only">All Design Works & Brand Systems — Arya Rajasa Studio</h1>
 
       {/* Top Editorial Header */}
       <section className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6 md:mb-8 select-none">
@@ -172,7 +182,7 @@ export default function Designs() {
                   {project.image && (
                     <img
                       src={project.image}
-                      alt={project.name}
+                      alt={`${project.name} — ${meta?.services?.join(', ') || project.details.replace(/[()]/g, '').trim() || 'Brand Design'}`}
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
                       loading="lazy"
                     />

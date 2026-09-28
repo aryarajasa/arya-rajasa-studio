@@ -1,33 +1,51 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
 interface SEOProps {
   title?: string;
   description?: string;
+  keywords?: string;
   image?: string;
   type?: 'website' | 'article';
+  breadcrumbs?: BreadcrumbItem[];
+  schema?: Record<string, any>;
 }
 
 const DEFAULT_TITLE = 'arya rajasa studio — brand designer';
 const DEFAULT_DESCRIPTION =
-  'Minimalist brand design studio — unforgettable brand & visual identities for modern businesses.';
+  'I design unforgettable brand & visual identities for your business — so you stand out in a crowded market. Brand designer based in Canggu, Bali.';
+const DEFAULT_KEYWORDS =
+  'Arya Rajasa, Arya Rajasa Studio, brand designer, visual identity, brand identity, logo design, Canggu, Bali brand designer, graphic design, packaging design, editorial design, art direction, Bali design studio';
 const SITE_NAME = 'arya rajasa studio';
 const BASE_DOMAIN = 'https://aryarajasa.github.io/arya-rajasa-studio';
+const DEFAULT_IMAGE = `${BASE_DOMAIN}/og-image.png`;
 
 export default function SEO({
   title,
   description = DEFAULT_DESCRIPTION,
+  keywords = DEFAULT_KEYWORDS,
   image,
   type = 'website',
+  breadcrumbs,
+  schema,
 }: SEOProps) {
   const location = useLocation();
   const fullTitle = title ? `${title} — ${SITE_NAME}` : DEFAULT_TITLE;
-  const canonicalUrl = `${BASE_DOMAIN}${location.pathname}`;
+  
+  // Clean canonical URL without trailing slash issues (except root)
+  const path = location.pathname.startsWith('/') ? location.pathname : `/${location.pathname}`;
+  const canonicalUrl = `${BASE_DOMAIN}${path === '/' ? '/' : path}`;
+  
   const metaImage = image?.startsWith('http')
     ? image
     : image
     ? `${BASE_DOMAIN}${image.startsWith('/') ? '' : '/'}${image}`
-    : `${BASE_DOMAIN}/favicon-512x512.png`;
+    : DEFAULT_IMAGE;
 
   useEffect(() => {
     // 1. Document Title
@@ -46,6 +64,9 @@ export default function SEO({
 
     // 2. Standard Meta Tags
     setMetaTag('name', 'description', description);
+    setMetaTag('name', 'keywords', keywords);
+    setMetaTag('name', 'author', 'Arya Rajasa');
+    setMetaTag('name', 'robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
 
     // 3. Open Graph Tags
     setMetaTag('property', 'og:title', fullTitle);
@@ -54,6 +75,7 @@ export default function SEO({
     setMetaTag('property', 'og:url', canonicalUrl);
     setMetaTag('property', 'og:site_name', SITE_NAME);
     setMetaTag('property', 'og:image', metaImage);
+    setMetaTag('property', 'og:locale', 'en_US');
 
     // 4. Twitter Card Tags
     setMetaTag('name', 'twitter:card', 'summary_large_image');
@@ -69,7 +91,54 @@ export default function SEO({
       document.head.appendChild(canonical);
     }
     canonical.setAttribute('href', canonicalUrl);
-  }, [fullTitle, description, canonicalUrl, metaImage, type]);
+
+    // 6. Dynamic JSON-LD Structured Data
+    const graph: any[] = [
+      {
+        '@type': 'WebSite',
+        '@id': `${BASE_DOMAIN}/#website`,
+        url: `${BASE_DOMAIN}/`,
+        name: SITE_NAME,
+        inLanguage: 'en-US',
+      },
+    ];
+
+    if (breadcrumbs && breadcrumbs.length > 0) {
+      graph.push({
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs.map((crumb, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: crumb.name,
+          item: crumb.url.startsWith('http') ? crumb.url : `${BASE_DOMAIN}${crumb.url.startsWith('/') ? '' : '/'}${crumb.url}`,
+        })),
+      });
+    }
+
+    if (schema) {
+      graph.push({
+        ...schema,
+        url: canonicalUrl,
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          url: `${BASE_DOMAIN}/`,
+        },
+      });
+    }
+
+    let scriptEl = document.getElementById('dynamic-seo-ld') as HTMLScriptElement | null;
+    if (!scriptEl) {
+      scriptEl = document.createElement('script');
+      scriptEl.id = 'dynamic-seo-ld';
+      scriptEl.type = 'application/ld+json';
+      document.head.appendChild(scriptEl);
+    }
+    scriptEl.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': graph,
+    });
+  }, [fullTitle, description, keywords, canonicalUrl, metaImage, type, breadcrumbs, schema]);
 
   return null;
 }

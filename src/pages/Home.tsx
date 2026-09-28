@@ -33,8 +33,9 @@ export function Slideshow({ items = recentPublishedProjects.slice(0, RECENT_PROJ
               {p.image && (
                 <img
                   src={p.image}
-                  alt={p.name}
+                  alt={`${p.name} — ${p.details.replace(/[()]/g, '').trim() || 'Brand Design Visual System'}`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               )}
             </div>
@@ -78,8 +79,11 @@ export default function Home() {
   return (
     <main ref={scrollRef} className="flex-1 flex flex-col min-h-0 relative overflow-y-auto md:overflow-hidden">
       <SEO
+        title="brand designer"
         description={content.home.intro}
+        image="/og-image.png"
       />
+      <h1 className="sr-only">Arya Rajasa Studio — Brand Designer in Canggu, Bali</h1>
       <section className="px-6 md:px-8 lg:px-16 max-w-[480px] mt-[5vh] md:mt-[10vh] shrink-0">
         <p className="select-none">
           {content.home.intro}

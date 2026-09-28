@@ -8,12 +8,20 @@ import { content, findProject, projectsList, Block } from '../content';
 // Images are optional while a project is still being filled in, and an <img>
 // with an empty src re-requests the page. Hold the space with the grey box
 // used everywhere else instead.
-function Media({ src, className }: { src: string; className: string }) {
+function Media({ src, className, alt = '' }: { src: string; className: string; alt?: string }) {
   if (!src) return <div className={`${className} bg-neutral-100`} />;
-  return <img src={src} alt="" className={`${className} object-cover bg-neutral-100`} />;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      className={`${className} object-cover bg-neutral-100`}
+    />
+  );
 }
 
-function CaseStudyBlock({ block }: { block: Block }) {
+function CaseStudyBlock({ block, projectName }: { block: Block; projectName: string }) {
   switch (block.type) {
     case 'text':
       return (
@@ -27,12 +35,23 @@ function CaseStudyBlock({ block }: { block: Block }) {
         </div>
       );
     case 'full':
-      return <Media src={block.image} className="w-full aspect-[16/9]" />;
+      return (
+        <Media
+          src={block.image}
+          alt={`${projectName} visual showcase — Arya Rajasa Studio`}
+          className="w-full aspect-[16/9]"
+        />
+      );
     case 'grid':
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {block.images.map((src, i) => (
-            <Media key={i} src={src} className="w-full aspect-[4/3]" />
+            <Media
+              key={i}
+              src={src}
+              alt={`${projectName} visual detail ${i + 1} — Arya Rajasa Studio`}
+              className="w-full aspect-[4/3]"
+            />
           ))}
         </div>
       );
@@ -103,7 +122,40 @@ export default function Project() {
         description={projectDescription}
         image={caseStudy.hero || project.image}
         type="article"
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Designs', url: '/designs' },
+          { name: project.name, url: `/project/${project.slug}` }
+        ]}
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'CreativeWork',
+          name: `${project.name} — ${project.details}`,
+          headline: `${project.name} Brand Design & Visual Identity System`,
+          description: projectDescription,
+          image: caseStudy.hero || project.image,
+          creator: {
+            '@type': 'Person',
+            name: 'Arya Rajasa',
+            jobTitle: 'Brand Designer',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Canggu',
+              addressRegion: 'Bali',
+              addressCountry: 'ID'
+            }
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Arya Rajasa Studio'
+          },
+          about: caseStudy.meta.industry || 'Branding & Visual Identity',
+          datePublished: caseStudy.meta.year || undefined
+        }}
       />
+      <h1 className="sr-only">
+        {project.name} — Brand Design Case Study by Arya Rajasa Studio, Canggu Bali
+      </h1>
       <div className="px-6 md:px-8 lg:px-16 pt-24 md:pt-32">
         {/* Top Section */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-32 mb-16 md:mb-24">
@@ -163,9 +215,13 @@ export default function Project() {
 
         {/* Content Flow */}
         <div className="flex flex-col gap-16 md:gap-24">
-          <Media src={caseStudy.hero} className="w-full aspect-[16/9]" />
+          <Media
+            src={caseStudy.hero}
+            alt={`${project.name} brand design hero showcase — Arya Rajasa Studio`}
+            className="w-full aspect-[16/9]"
+          />
           {caseStudy.blocks.map((block, i) => (
-            <CaseStudyBlock key={i} block={block} />
+            <CaseStudyBlock key={i} block={block} projectName={project.name} />
           ))}
         </div>
 
