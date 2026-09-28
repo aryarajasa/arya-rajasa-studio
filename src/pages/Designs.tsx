@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
 import SEO from '../components/SEO';
 import { projectsList, Project } from '../content';
 
@@ -22,6 +23,33 @@ export default function Designs() {
   const scrollRef = useRef<HTMLElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
+
+  const mouseX = useMotionValue(-500);
+  const mouseY = useMotionValue(-500);
+  const springConfig = { damping: 28, stiffness: 320, mass: 0.25 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  const updateCursorPos = (e: React.MouseEvent) => {
+    const previewWidth = 280;
+    const previewHeight = 210;
+    const margin = 24;
+
+    let targetX = e.clientX + margin;
+    if (targetX + previewWidth > window.innerWidth - margin) {
+      targetX = e.clientX - previewWidth - margin;
+    }
+
+    let targetY = e.clientY - previewHeight / 2;
+    if (targetY < 80) targetY = 80;
+    if (targetY + previewHeight > window.innerHeight - margin) {
+      targetY = window.innerHeight - previewHeight - margin;
+    }
+
+    mouseX.set(targetX);
+    mouseY.set(targetY);
+  };
 
   // Sort projects from most recent / highest year to oldest
   const sortedProjects = useMemo(() => {
@@ -82,7 +110,10 @@ export default function Designs() {
         <div className="flex items-center gap-6 text-[11px]">
           <button
             type="button"
-            onClick={() => setViewMode('grid')}
+            onClick={() => {
+              setViewMode('grid');
+              setHoveredProject(null);
+            }}
             className={`transition-colors focus:outline-none cursor-pointer ${
               viewMode === 'grid'
                 ? 'text-neutral-900 font-medium underline underline-offset-4'
@@ -93,7 +124,10 @@ export default function Designs() {
           </button>
           <button
             type="button"
-            onClick={() => setViewMode('index')}
+            onClick={() => {
+              setViewMode('index');
+              setHoveredProject(null);
+            }}
             className={`transition-colors focus:outline-none cursor-pointer ${
               viewMode === 'index'
                 ? 'text-neutral-900 font-medium underline underline-offset-4'
@@ -160,9 +194,16 @@ export default function Designs() {
 
       {/* 2. Index View: Minimalist Editorial Archive Table */}
       {viewMode === 'index' && (
-        <section className="w-full select-none divide-y divide-neutral-200 designs-index-table">
+        <section
+          onMouseMove={updateCursorPos}
+          onMouseLeave={() => setHoveredProject(null)}
+          className="w-full select-none divide-y divide-neutral-200 designs-index-table"
+        >
           {/* Header Row */}
-          <div className="grid grid-cols-12 py-3 text-[11px] uppercase tracking-wider text-neutral-400">
+          <div
+            onMouseEnter={() => setHoveredProject(null)}
+            className="grid grid-cols-12 py-3 text-[11px] uppercase tracking-wider text-neutral-400"
+          >
             <span className="col-span-1">no.</span>
             <span className="col-span-4 md:col-span-4">project</span>
             <span className="col-span-4 md:col-span-4">discipline</span>
@@ -179,6 +220,10 @@ export default function Designs() {
               <div
                 key={project.slug}
                 onClick={() => navigate(`/project/${project.slug}`)}
+                onMouseEnter={(e) => {
+                  updateCursorPos(e);
+                  setHoveredProject(project);
+                }}
                 className="group grid grid-cols-12 items-center py-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-white/[0.03] transition-colors -mx-2 px-2 rounded-[2px]"
               >
                 <span className="col-span-1 text-neutral-400 text-[11px] font-mono">
@@ -208,6 +253,41 @@ export default function Designs() {
             );
           })}
         </section>
+      )}
+
+      {/* Floating Hover Thumbnail for Index View */}
+      {viewMode === 'index' && (
+        <AnimatePresence>
+          {hoveredProject && hoveredProject.image && (
+            <motion.div
+              key="index-hover-preview"
+              style={{
+                x: smoothX,
+                y: smoothY,
+              }}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.94 }}
+              transition={{ duration: 0.22, ease: [0.25, 1, 0.5, 1] }}
+              className="fixed top-0 left-0 pointer-events-none z-30 hidden md:block"
+            >
+              <div className="w-[280px] aspect-[4/3] rounded-[2px] overflow-hidden bg-[#e5e5e5] dark:bg-[#121212] shadow-[0_20px_50px_rgba(0,0,0,0.18)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-neutral-200/80 dark:border-white/10 relative">
+                <AnimatePresence>
+                  <motion.img
+                    key={hoveredProject.slug}
+                    src={hoveredProject.image}
+                    alt={hoveredProject.name}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
 
       {showScrollTop && (
