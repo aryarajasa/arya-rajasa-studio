@@ -120,7 +120,7 @@ export default function AdminApp() {
 
   const addProject = () => {
     const project = emptyProject(projects);
-    setProjects([...projects, project]);
+    setProjects([project, ...projects]);
     navigate(`/admin/${project.slug}`);
   };
 

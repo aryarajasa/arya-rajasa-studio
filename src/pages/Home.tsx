@@ -8,7 +8,10 @@ import { content, projectsList, Project } from '../content';
 // Display 5 recent projects on homepage slider; full archive is on /designs
 const RECENT_PROJECTS_COUNT = 5;
 
-export function Slideshow({ items = projectsList.slice(0, RECENT_PROJECTS_COUNT) }: { items?: Project[] }) {
+// Only showcase projects with an image in the homepage slideshow
+const recentPublishedProjects = projectsList.filter((p) => Boolean(p.image));
+
+export function Slideshow({ items = recentPublishedProjects.slice(0, RECENT_PROJECTS_COUNT) }: { items?: Project[] }) {
   const navigate = useNavigate();
 
   return (
@@ -50,7 +53,7 @@ export function Slideshow({ items = projectsList.slice(0, RECENT_PROJECTS_COUNT)
 export default function Home() {
   const scrollRef = useRef<HTMLElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const recentProjects = projectsList.slice(0, RECENT_PROJECTS_COUNT);
+  const recentProjects = recentPublishedProjects.slice(0, RECENT_PROJECTS_COUNT);
 
   useEffect(() => {
     const handleScroll = () => {

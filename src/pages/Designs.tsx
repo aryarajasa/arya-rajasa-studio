@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -6,11 +6,34 @@ import { projectsList, Project } from '../content';
 
 type ViewMode = 'grid' | 'index';
 
+// Extract numeric year from meta.year (e.g. "2026", "2024-2025")
+const getProjectYear = (p: Project): number => {
+  const yearStr = p.caseStudy?.meta?.year || '';
+  const matches = yearStr.match(/\d{4}/g);
+  if (matches && matches.length > 0) {
+    return Math.max(...matches.map(Number));
+  }
+  const parsed = parseInt(yearStr, 10);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
 export default function Designs() {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+
+  // Sort projects from most recent / highest year to oldest
+  const sortedProjects = useMemo(() => {
+    return [...projectsList].sort((a, b) => {
+      const yearA = getProjectYear(a);
+      const yearB = getProjectYear(b);
+      if (yearB !== yearA) {
+        return yearB - yearA;
+      }
+      return 0;
+    });
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,7 +55,7 @@ export default function Designs() {
     }
   };
 
-  const projectCount = String(projectsList.length).padStart(2, '0');
+  const projectCount = String(sortedProjects.length).padStart(2, '0');
 
   return (
     <main
@@ -85,7 +108,7 @@ export default function Designs() {
       {/* 1. Grid View: Asymmetric Editorial Gallery */}
       {viewMode === 'grid' && (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-8 md:gap-y-10 lg:gap-y-12">
-          {projectsList.map((project: Project, idx: number) => {
+          {sortedProjects.map((project: Project, idx: number) => {
             const indexNumber = String(idx + 1).padStart(2, '0');
             const meta = project.caseStudy?.meta;
 
@@ -148,7 +171,7 @@ export default function Designs() {
           </div>
 
           {/* Project Rows */}
-          {projectsList.map((project: Project, idx: number) => {
+          {sortedProjects.map((project: Project, idx: number) => {
             const indexNumber = String(idx + 1).padStart(2, '0');
             const meta = project.caseStudy?.meta;
 

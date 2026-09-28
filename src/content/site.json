@@ -27,6 +27,27 @@
   },
   "projects": [
     {
+      "slug": "new-project",
+      "name": "new project",
+      "details": "( brand design / identity )",
+      "image": "",
+      "caseStudy": {
+        "intro": "",
+        "label": "case study",
+        "meta": {
+          "company": "new project",
+          "services": [
+            "brand design"
+          ],
+          "industry": "design",
+          "year": "2026",
+          "liveSite": ""
+        },
+        "hero": "",
+        "blocks": []
+      }
+    },
+    {
       "slug": "aura-botanical",
       "name": "aura botanical",
       "details": "( brand design / packaging )",
@@ -450,24 +471,6 @@
             "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1600"
           }
         ]
-      }
-    },
-    {
-      "slug": "new-project",
-      "name": "new project",
-      "details": "",
-      "image": "",
-      "caseStudy": {
-        "intro": "",
-        "label": "case study",
-        "meta": {
-          "company": "",
-          "services": [],
-          "industry": "",
-          "year": "2026"
-        },
-        "hero": "",
-        "blocks": []
       }
     }
   ],
