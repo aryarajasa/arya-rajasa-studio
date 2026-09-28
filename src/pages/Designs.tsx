@@ -37,7 +37,7 @@ export default function Designs() {
   return (
     <main
       ref={scrollRef}
-      className="flex-1 px-6 md:px-8 lg:px-16 mt-[5vh] md:mt-[10vh] overflow-y-auto w-full pb-32"
+      className="flex-1 px-6 md:px-8 lg:px-16 pt-3 md:pt-4 overflow-y-auto w-full pb-32"
     >
       <SEO
         title="designs"
@@ -45,13 +45,13 @@ export default function Designs() {
       />
 
       {/* Top Editorial Header */}
-      <section className="flex flex-col md:flex-row md:items-baseline justify-between gap-6 mb-12 md:mb-16 select-none">
-        <div className="flex flex-col gap-1 max-w-sm">
-          <p className="text-neutral-900 leading-relaxed">
-            All selected design works, visual identity systems, and brand direction.
+      <section className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6 md:mb-8 select-none">
+        <div className="flex items-baseline gap-3">
+          <p className="text-neutral-900">
+            all works
           </p>
           <span className="text-neutral-400 text-[11px]">
-            archive ({projectCount})
+            ({projectCount})
           </span>
         </div>
 
@@ -66,7 +66,7 @@ export default function Designs() {
                 : 'text-neutral-400 hover:text-neutral-900'
             }`}
           >
-            grid view
+            grid
           </button>
           <button
             type="button"
@@ -77,7 +77,7 @@ export default function Designs() {
                 : 'text-neutral-400 hover:text-neutral-900'
             }`}
           >
-            index view
+            index
           </button>
         </div>
       </section>
