@@ -160,7 +160,7 @@ export default function Designs() {
 
       {/* 2. Index View: Minimalist Editorial Archive Table */}
       {viewMode === 'index' && (
-        <section className="w-full select-none divide-y divide-neutral-200 border-t border-b border-neutral-200">
+        <section className="w-full select-none divide-y divide-neutral-200 designs-index-table">
           {/* Header Row */}
           <div className="grid grid-cols-12 py-3 text-[11px] uppercase tracking-wider text-neutral-400">
             <span className="col-span-1">no.</span>
@@ -179,7 +179,7 @@ export default function Designs() {
               <div
                 key={project.slug}
                 onClick={() => navigate(`/project/${project.slug}`)}
-                className="group grid grid-cols-12 items-center py-4 cursor-pointer hover:bg-neutral-50 transition-colors -mx-2 px-2 rounded-[2px]"
+                className="group grid grid-cols-12 items-center py-4 cursor-pointer hover:bg-neutral-50 dark:hover:bg-white/[0.03] transition-colors -mx-2 px-2 rounded-[2px]"
               >
                 <span className="col-span-1 text-neutral-400 text-[11px] font-mono">
                   {indexNumber}

@@ -84,3 +84,14 @@ html.dark .border-neutral-200,
 html.dark .border-neutral-300 {
   border-color: var(--site-border) !important;
 }
+
+html.dark .divide-neutral-200 > :not(:last-child) {
+  border-color: var(--site-border) !important;
+}
+
+/* Thin editorial dividers for Designs Index table in dark mode */
+html.dark .designs-index-table > :not(:last-child) {
+  border-top-width: 0px !important;
+  border-bottom-width: 0.5px !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}

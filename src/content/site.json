@@ -27,98 +27,6 @@
   },
   "projects": [
     {
-      "slug": "new-project",
-      "name": "new project",
-      "details": "( brand design / identity )",
-      "image": "",
-      "caseStudy": {
-        "intro": "",
-        "label": "case study",
-        "meta": {
-          "company": "new project",
-          "services": [
-            "brand design"
-          ],
-          "industry": "design",
-          "year": "2026",
-          "liveSite": ""
-        },
-        "hero": "",
-        "blocks": []
-      }
-    },
-    {
-      "slug": "aura-botanical",
-      "name": "aura botanical",
-      "details": "( brand design / packaging )",
-      "image": "/images/e2824074967786b7ca1d1699bcf70826-1783134491063.webp",
-      "caseStudy": {
-        "intro": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at.",
-        "label": "case study",
-        "meta": {
-          "company": "aura botanical",
-          "services": [
-            "branding",
-            "social media",
-            "website design"
-          ],
-          "industry": "wellness",
-          "year": "2025",
-          "liveSite": ""
-        },
-        "hero": "https://images.unsplash.com/photo-1556760544-74068565f05c?auto=format&fit=crop&q=80&w=1600",
-        "blocks": [
-          {
-            "type": "text",
-            "heading": "Lorem ipsum dolor",
-            "paragraphs": [
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at, interdum blandit mauris. Mauris felis nisi, ultricies in eros ut, tempor dignissim eros. Quisque ultricies, turpis at viverra finibus, nibh metus commodo nunc, sit amet molestie nibh urna eget mi. Aenean finibus purus at rutrum cursus. Etiam elementum porta sem et efficitur. Nulla lacinia, ante et ultricies aliquet, justo nisi posuere ex, eu condimentum nisl sem ac elit.",
-              "Maecenas non metus sed risus egestas lacinia. Integer non dolor ut lectus luctus ornare. Phasellus purus velit, placerat sit amet sollicitudin eget, condimentum ac libero. Nulla facilisi. Sed non lectus tempor, finibus sapien at, tristique libero. Cras bibendum porttitor ultricies. Nam sagittis neque pharetra, maximus metus ut, accumsan leo. Nam a diam ante. Etiam posuere, sem vel condimentum pretium, odio nunc pretium est, sed congue tortor lacus eu ex. Nullam malesuada tristique ornare."
-            ]
-          },
-          {
-            "type": "grid",
-            "images": [
-              "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&q=80&w=800",
-              "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&q=80&w=800"
-            ]
-          },
-          {
-            "type": "full",
-            "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1600"
-          },
-          {
-            "type": "text",
-            "heading": "Lorem ipsum dolor",
-            "paragraphs": [
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at, interdum blandit mauris. Mauris felis nisi, ultricies in eros ut, tempor dignissim eros. Quisque ultricies, turpis at viverra finibus, nibh metus commodo nunc, sit amet molestie nibh urna eget mi. Aenean finibus purus at rutrum cursus. Etiam elementum porta sem et efficitur. Nulla lacinia, ante et ultricies aliquet, justo nisi posuere ex, eu condimentum nisl sem ac elit."
-            ]
-          },
-          {
-            "type": "grid",
-            "images": [
-              "https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&q=80&w=800",
-              "https://images.unsplash.com/photo-1541462608143-67571c6738dd?auto=format&fit=crop&q=80&w=800",
-              "https://images.unsplash.com/photo-1506744626753-1fa44df14d28?auto=format&fit=crop&q=80&w=800",
-              "https://images.unsplash.com/photo-1470770841072-f978cbd37692?auto=format&fit=crop&q=80&w=800"
-            ]
-          },
-          {
-            "type": "text",
-            "heading": "Lorem ipsum dolor",
-            "paragraphs": [
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at, interdum blandit mauris. Mauris felis nisi, ultricies in eros ut, tempor dignissim eros. Quisque ultricies, turpis at viverra finibus, nibh metus commodo nunc, sit amet molestie nibh urna eget mi. Aenean finibus purus at rutrum cursus. Etiam elementum porta sem et efficitur. Nulla lacinia, ante et ultricies aliquet, justo nisi posuere ex, eu condimentum nisl sem ac elit.",
-              "Maecenas non metus sed risus egestas lacinia. Integer non dolor ut lectus luctus ornare. Phasellus purus velit, placerat sit amet sollicitudin eget, condimentum ac libero. Nulla facilisi. Sed non lectus tempor, finibus sapien at, tristique libero. Cras bibendum porttitor ultricies. Nam sagittis neque pharetra, maximus metus ut, accumsan leo. Nam a diam ante. Etiam posuere, sem vel condimentum pretium, odio nunc pretium est, sed congue tortor lacus eu ex. Nullam malesuada tristique ornare."
-            ]
-          },
-          {
-            "type": "full",
-            "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1600"
-          }
-        ]
-      }
-    },
-    {
       "slug": "voyage-coffee",
       "name": "voyage coffee",
       "details": "( brand design / art direction )",
@@ -199,6 +107,77 @@
         "label": "case study",
         "meta": {
           "company": "neu studio",
+          "services": [
+            "branding",
+            "social media",
+            "website design"
+          ],
+          "industry": "wellness",
+          "year": "2025",
+          "liveSite": ""
+        },
+        "hero": "https://images.unsplash.com/photo-1556760544-74068565f05c?auto=format&fit=crop&q=80&w=1600",
+        "blocks": [
+          {
+            "type": "text",
+            "heading": "Lorem ipsum dolor",
+            "paragraphs": [
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at, interdum blandit mauris. Mauris felis nisi, ultricies in eros ut, tempor dignissim eros. Quisque ultricies, turpis at viverra finibus, nibh metus commodo nunc, sit amet molestie nibh urna eget mi. Aenean finibus purus at rutrum cursus. Etiam elementum porta sem et efficitur. Nulla lacinia, ante et ultricies aliquet, justo nisi posuere ex, eu condimentum nisl sem ac elit.",
+              "Maecenas non metus sed risus egestas lacinia. Integer non dolor ut lectus luctus ornare. Phasellus purus velit, placerat sit amet sollicitudin eget, condimentum ac libero. Nulla facilisi. Sed non lectus tempor, finibus sapien at, tristique libero. Cras bibendum porttitor ultricies. Nam sagittis neque pharetra, maximus metus ut, accumsan leo. Nam a diam ante. Etiam posuere, sem vel condimentum pretium, odio nunc pretium est, sed congue tortor lacus eu ex. Nullam malesuada tristique ornare."
+            ]
+          },
+          {
+            "type": "grid",
+            "images": [
+              "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&fit=crop&q=80&w=800",
+              "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?auto=format&fit=crop&q=80&w=800"
+            ]
+          },
+          {
+            "type": "full",
+            "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1600"
+          },
+          {
+            "type": "text",
+            "heading": "Lorem ipsum dolor",
+            "paragraphs": [
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at, interdum blandit mauris. Mauris felis nisi, ultricies in eros ut, tempor dignissim eros. Quisque ultricies, turpis at viverra finibus, nibh metus commodo nunc, sit amet molestie nibh urna eget mi. Aenean finibus purus at rutrum cursus. Etiam elementum porta sem et efficitur. Nulla lacinia, ante et ultricies aliquet, justo nisi posuere ex, eu condimentum nisl sem ac elit."
+            ]
+          },
+          {
+            "type": "grid",
+            "images": [
+              "https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&q=80&w=800",
+              "https://images.unsplash.com/photo-1541462608143-67571c6738dd?auto=format&fit=crop&q=80&w=800",
+              "https://images.unsplash.com/photo-1506744626753-1fa44df14d28?auto=format&fit=crop&q=80&w=800",
+              "https://images.unsplash.com/photo-1470770841072-f978cbd37692?auto=format&fit=crop&q=80&w=800"
+            ]
+          },
+          {
+            "type": "text",
+            "heading": "Lorem ipsum dolor",
+            "paragraphs": [
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at, interdum blandit mauris. Mauris felis nisi, ultricies in eros ut, tempor dignissim eros. Quisque ultricies, turpis at viverra finibus, nibh metus commodo nunc, sit amet molestie nibh urna eget mi. Aenean finibus purus at rutrum cursus. Etiam elementum porta sem et efficitur. Nulla lacinia, ante et ultricies aliquet, justo nisi posuere ex, eu condimentum nisl sem ac elit.",
+              "Maecenas non metus sed risus egestas lacinia. Integer non dolor ut lectus luctus ornare. Phasellus purus velit, placerat sit amet sollicitudin eget, condimentum ac libero. Nulla facilisi. Sed non lectus tempor, finibus sapien at, tristique libero. Cras bibendum porttitor ultricies. Nam sagittis neque pharetra, maximus metus ut, accumsan leo. Nam a diam ante. Etiam posuere, sem vel condimentum pretium, odio nunc pretium est, sed congue tortor lacus eu ex. Nullam malesuada tristique ornare."
+            ]
+          },
+          {
+            "type": "full",
+            "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1600"
+          }
+        ]
+      }
+    },
+    {
+      "slug": "aura-botanical",
+      "name": "aura botanical",
+      "details": "( brand design / packaging )",
+      "image": "/images/e2824074967786b7ca1d1699bcf70826-1783134491063.webp",
+      "caseStudy": {
+        "intro": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quam purus, tristique quis lacus at.",
+        "label": "case study",
+        "meta": {
+          "company": "aura botanical",
           "services": [
             "branding",
             "social media",
