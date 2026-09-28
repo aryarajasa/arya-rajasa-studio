@@ -84,7 +84,7 @@ export default function Designs() {
 
       {/* 1. Grid View: Asymmetric Editorial Gallery */}
       {viewMode === 'grid' && (
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 lg:gap-x-16 lg:gap-y-24">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-8 md:gap-y-10 lg:gap-y-12">
           {projectsList.map((project: Project, idx: number) => {
             const indexNumber = String(idx + 1).padStart(2, '0');
             const meta = project.caseStudy?.meta;
@@ -93,11 +93,11 @@ export default function Designs() {
               <article
                 key={project.slug}
                 onClick={() => navigate(`/project/${project.slug}`)}
-                className="group flex flex-col gap-3 cursor-pointer select-none"
+                className="group flex flex-col gap-2 cursor-pointer select-none"
               >
                 {/* Header line above card */}
                 <div className="flex items-baseline justify-between gap-4">
-                  <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-2.5">
                     <span className="text-neutral-400 text-[11px] font-mono">
                       {indexNumber}
                     </span>
@@ -123,7 +123,7 @@ export default function Designs() {
                 </div>
 
                 {/* Metadata footer below card */}
-                <div className="flex items-center justify-between text-neutral-400 text-[11px] pt-1">
+                <div className="flex items-center justify-between text-neutral-400 text-[11px]">
                   <span>
                     {meta?.industry ? `${meta.industry}` : 'brand design'}
                   </span>
