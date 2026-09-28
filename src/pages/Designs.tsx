@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import SEO from '../components/SEO';
-import { projectsList } from '../content';
+import { projectsList, Project } from '../content';
+
+type ViewMode = 'grid' | 'index';
 
 export default function Designs() {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,99 +32,165 @@ export default function Designs() {
     }
   };
 
+  const projectCount = String(projectsList.length).padStart(2, '0');
+
   return (
     <main
       ref={scrollRef}
-      className="flex-1 overflow-y-auto relative bg-white pb-32 px-6 md:px-8 lg:px-16"
+      className="flex-1 px-6 md:px-8 lg:px-16 mt-[5vh] md:mt-[10vh] overflow-y-auto w-full pb-32"
     >
       <SEO
         title="designs"
-        description="All selected works, brand identities, and visual systems by Arya Rajasa Studio."
+        description="Comprehensive archive of all brand identities, visual systems, and graphic design projects by Arya Rajasa Studio."
       />
 
-      {/* Header section */}
-      <section className="pt-16 md:pt-24 pb-12 md:pb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-neutral-200/60 dark:border-neutral-800">
-        <div className="flex flex-col gap-3 max-w-xl">
-          <span className="text-[11px] uppercase tracking-widest text-neutral-400 font-mono">
-            archive / selected works
-          </span>
-          <p className="text-neutral-900 text-sm md:text-base leading-relaxed select-none">
-            Selected brand identities, packaging, digital experiences, and visual systems crafted for modern businesses.
+      {/* Top Editorial Header */}
+      <section className="flex flex-col md:flex-row md:items-baseline justify-between gap-6 mb-12 md:mb-16 select-none">
+        <div className="flex flex-col gap-1 max-w-sm">
+          <p className="text-neutral-900 leading-relaxed">
+            All selected design works, visual identity systems, and brand direction.
           </p>
-        </div>
-
-        <div className="flex items-center gap-2 text-[11px] font-mono text-neutral-400">
-          <span>total projects:</span>
-          <span className="text-neutral-900 font-medium font-sans text-xs">
-            {String(projectsList.length).padStart(2, '0')}
+          <span className="text-neutral-400 text-[11px]">
+            archive ({projectCount})
           </span>
         </div>
-      </section>
 
-      {/* Editorial Projects Grid */}
-      <section className="pt-12 md:pt-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 lg:gap-x-12 gap-y-16 md:gap-y-20">
-          {projectsList.map((project, idx) => (
-            <div
-              key={project.slug}
-              className="flex flex-col gap-3 group cursor-pointer select-none"
-              onClick={() => navigate(`/project/${project.slug}`)}
-            >
-              {/* Card Meta Top */}
-              <div className="flex items-baseline justify-between gap-4 text-xs">
-                <div className="flex items-baseline gap-2 min-w-0">
-                  <span className="text-neutral-400 font-mono text-[10px]">
-                    {String(idx + 1).padStart(2, '0')}.
-                  </span>
-                  <span className="text-neutral-900 font-medium group-hover:text-neutral-500 transition-colors truncate">
-                    {project.name}
-                  </span>
-                </div>
-                <span className="text-neutral-400 text-[11px] shrink-0">
-                  {project.caseStudy.meta.year || project.details}
-                </span>
-              </div>
-
-              {/* Card Thumbnail */}
-              <div className="w-full aspect-[4/3] bg-[#e5e5e5] rounded-[2px] overflow-hidden relative">
-                {project.image ? (
-                  <img
-                    src={project.image}
-                    alt={project.name}
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-neutral-400 text-xs">
-                    {project.name}
-                  </div>
-                )}
-
-                {/* Subtle Hover Action Pill */}
-                <div className="absolute bottom-3 right-3 bg-black/75 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1 pointer-events-none">
-                  <span>view project</span>
-                  <ArrowUpRight size={10} strokeWidth={2} />
-                </div>
-              </div>
-
-              {/* Card Meta Bottom */}
-              <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1">
-                <span className="truncate">{project.details}</span>
-                <span className="text-neutral-500 font-mono text-[10px] uppercase">
-                  {project.caseStudy.meta.industry || 'branding'}
-                </span>
-              </div>
-            </div>
-          ))}
+        {/* View Switcher: Grid vs Index */}
+        <div className="flex items-center gap-6 text-[11px]">
+          <button
+            type="button"
+            onClick={() => setViewMode('grid')}
+            className={`transition-colors focus:outline-none cursor-pointer ${
+              viewMode === 'grid'
+                ? 'text-neutral-900 font-medium underline underline-offset-4'
+                : 'text-neutral-400 hover:text-neutral-900'
+            }`}
+          >
+            grid view
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('index')}
+            className={`transition-colors focus:outline-none cursor-pointer ${
+              viewMode === 'index'
+                ? 'text-neutral-900 font-medium underline underline-offset-4'
+                : 'text-neutral-400 hover:text-neutral-900'
+            }`}
+          >
+            index view
+          </button>
         </div>
       </section>
 
-      {/* Back to top button */}
+      {/* 1. Grid View: Asymmetric Editorial Gallery */}
+      {viewMode === 'grid' && (
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 lg:gap-x-16 lg:gap-y-24">
+          {projectsList.map((project: Project, idx: number) => {
+            const indexNumber = String(idx + 1).padStart(2, '0');
+            const meta = project.caseStudy?.meta;
+
+            return (
+              <article
+                key={project.slug}
+                onClick={() => navigate(`/project/${project.slug}`)}
+                className="group flex flex-col gap-3 cursor-pointer select-none"
+              >
+                {/* Header line above card */}
+                <div className="flex items-baseline justify-between gap-4">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-neutral-400 text-[11px] font-mono">
+                      {indexNumber}
+                    </span>
+                    <span className="text-neutral-900 font-medium group-hover:text-neutral-500 transition-colors">
+                      {project.name}
+                    </span>
+                  </div>
+                  <span className="text-neutral-400 text-right text-[11px]">
+                    {project.details}
+                  </span>
+                </div>
+
+                {/* Image Canvas */}
+                <div className="w-full aspect-[4/3] bg-[#e5e5e5] rounded-[2px] overflow-hidden relative">
+                  {project.image && (
+                    <img
+                      src={project.image}
+                      alt={project.name}
+                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+                      loading="lazy"
+                    />
+                  )}
+                </div>
+
+                {/* Metadata footer below card */}
+                <div className="flex items-center justify-between text-neutral-400 text-[11px] pt-1">
+                  <span>
+                    {meta?.industry ? `${meta.industry}` : 'brand design'}
+                  </span>
+                  <span>{meta?.year || '2025'}</span>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+      )}
+
+      {/* 2. Index View: Minimalist Editorial Archive Table */}
+      {viewMode === 'index' && (
+        <section className="w-full select-none divide-y divide-neutral-200 border-t border-b border-neutral-200">
+          {/* Header Row */}
+          <div className="grid grid-cols-12 py-3 text-[11px] uppercase tracking-wider text-neutral-400">
+            <span className="col-span-1">no.</span>
+            <span className="col-span-4 md:col-span-4">project</span>
+            <span className="col-span-4 md:col-span-4">discipline</span>
+            <span className="hidden md:block md:col-span-2">industry</span>
+            <span className="col-span-3 md:col-span-1 text-right">year</span>
+          </div>
+
+          {/* Project Rows */}
+          {projectsList.map((project: Project, idx: number) => {
+            const indexNumber = String(idx + 1).padStart(2, '0');
+            const meta = project.caseStudy?.meta;
+
+            return (
+              <div
+                key={project.slug}
+                onClick={() => navigate(`/project/${project.slug}`)}
+                className="group grid grid-cols-12 items-center py-4 cursor-pointer hover:bg-neutral-50 transition-colors -mx-2 px-2 rounded-[2px]"
+              >
+                <span className="col-span-1 text-neutral-400 text-[11px] font-mono">
+                  {indexNumber}
+                </span>
+
+                <span className="col-span-4 md:col-span-4 text-neutral-900 group-hover:text-neutral-500 transition-colors font-medium flex items-center gap-1">
+                  {project.name}
+                  <ArrowUpRight
+                    size={11}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                  />
+                </span>
+
+                <span className="col-span-4 md:col-span-4 text-neutral-400 text-[11px] truncate">
+                  {meta?.services?.join(', ') || project.details.replace(/[()]/g, '')}
+                </span>
+
+                <span className="hidden md:block md:col-span-2 text-neutral-400 text-[11px]">
+                  {meta?.industry || 'design'}
+                </span>
+
+                <span className="col-span-3 md:col-span-1 text-right text-neutral-400 text-[11px]">
+                  {meta?.year || '2025'}
+                </span>
+              </div>
+            );
+          })}
+        </section>
+      )}
+
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 mb-6 w-10 h-10 bg-neutral-900 text-white rounded-full flex items-center justify-center z-50 focus:outline-none cursor-pointer shadow-sm hover:scale-105 transition-transform"
-          aria-label="Scroll to top"
+          className="md:hidden fixed bottom-6 right-6 mb-6 w-10 h-10 bg-neutral-900 text-white rounded-full flex items-center justify-center z-50 focus:outline-none"
         >
           <ArrowUp size={16} />
         </button>

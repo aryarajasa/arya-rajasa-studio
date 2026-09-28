@@ -5,16 +5,17 @@ import ProjectSlider from '../components/ProjectSlider';
 import SEO from '../components/SEO';
 import { content, projectsList, Project } from '../content';
 
-export function Slideshow({ items }: { items?: Project[] }) {
+// Display 5 recent projects on homepage slider; full archive is on /designs
+const RECENT_PROJECTS_COUNT = 5;
+
+export function Slideshow({ items = projectsList.slice(0, RECENT_PROJECTS_COUNT) }: { items?: Project[] }) {
   const navigate = useNavigate();
-  // Default to 5 most recent projects on homepage
-  const displayItems = items ?? projectsList.slice(0, 5);
 
   return (
     <>
       {/* Mobile Stacked View */}
       <div className="md:hidden flex flex-col px-6 gap-16 pt-8 pb-32">
-        {displayItems.map((p) => (
+        {items.map((p) => (
           <div
             key={p.slug}
             className="w-full flex flex-col gap-4 select-none cursor-pointer"
@@ -40,7 +41,7 @@ export function Slideshow({ items }: { items?: Project[] }) {
 
       {/* Desktop two-up auto-sliding view */}
       <div className="hidden md:block md:h-full px-8 lg:px-16">
-        <ProjectSlider items={displayItems} />
+        <ProjectSlider items={items} />
       </div>
     </>
   );
@@ -49,7 +50,7 @@ export function Slideshow({ items }: { items?: Project[] }) {
 export default function Home() {
   const scrollRef = useRef<HTMLElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const recentProjects = projectsList.slice(0, 5);
+  const recentProjects = projectsList.slice(0, RECENT_PROJECTS_COUNT);
 
   useEffect(() => {
     const handleScroll = () => {

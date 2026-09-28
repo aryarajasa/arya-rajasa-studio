@@ -6,8 +6,8 @@ import CustomCursor from './components/CustomCursor';
 import Loader from './components/Loader';
 import Logo from './components/Logo';
 import Home from './pages/Home';
-import Designs from './pages/Designs';
 import Story from './pages/Story';
+import Designs from './pages/Designs';
 import Playbook from './pages/Playbook';
 import Project from './pages/Project';
 import { content } from './content';
@@ -188,11 +188,7 @@ export default function App() {
           </AnimatePresence>
         </header>
 
-        {/* Cross-fade between pages. `mode="wait"` lets the outgoing page
-            finish before the next one enters, and passing `location` into
-            Routes keeps the exiting copy rendering its own route instead of
-            snapping to the new one mid-exit. The wrapper carries the flex
-            sizing the pages expect from the shell. */}
+        {/* Cross-fade between pages */}
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -204,8 +200,8 @@ export default function App() {
           >
             <Routes location={location}>
               <Route path="/" element={<Home />} />
-              <Route path="/designs" element={<Designs />} />
               <Route path="/story" element={<Story />} />
+              <Route path="/designs" element={<Designs />} />
               <Route path="/playbook" element={<Playbook />} />
               <Route path="/project/:slug" element={<Project />} />
               {/* Legacy single-project URL from before per-project pages. */}
