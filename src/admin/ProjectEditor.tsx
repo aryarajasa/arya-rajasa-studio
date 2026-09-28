@@ -69,27 +69,32 @@ function BlockCard({
       )}
 
       {block.type === 'full' && (
-        <ImageInput
-          value={block.image}
-          aspect="aspect-[16/9]"
-          onChange={(image) => onChange({ ...block, image })}
-        />
+        <Field label="full-width image" hint="suggested: 1920 × 1080 px (16:9)">
+          <ImageInput
+            value={block.image}
+            aspect="aspect-[16/9]"
+            suggestedSize="1920 × 1080 px (16:9)"
+            onChange={(image) => onChange({ ...block, image })}
+          />
+        </Field>
       )}
 
       {block.type === 'grid' && (
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-3">
             {block.images.map((image, i) => (
-              <ImageInput
-                key={i}
-                value={image}
-                onChange={(next) => {
-                  const images = [...block.images];
-                  images[i] = next;
-                  onChange({ ...block, images });
-                }}
-                onRemove={() => onChange({ ...block, images: block.images.filter((_, j) => j !== i) })}
-              />
+              <Field key={i} label={`grid image ${i + 1}`} hint="suggested: 1200 × 900 px (4:3)">
+                <ImageInput
+                  value={image}
+                  suggestedSize="1200 × 900 px (4:3)"
+                  onChange={(next) => {
+                    const images = [...block.images];
+                    images[i] = next;
+                    onChange({ ...block, images });
+                  }}
+                  onRemove={() => onChange({ ...block, images: block.images.filter((_, j) => j !== i) })}
+                />
+              </Field>
             ))}
           </div>
           <div>
@@ -153,8 +158,12 @@ export default function ProjectEditor({
               <p className="text-xs text-red-600">another project already uses this slug</p>
             )}
           </div>
-          <Field label="thumbnail" hint="shown in the homepage carousel">
-            <ImageInput value={project.image} onChange={(image) => onChange({ ...project, image })} />
+          <Field label="thumbnail" hint="shown in the homepage carousel (suggested: 1600 × 1200 px • 4:3)">
+            <ImageInput
+              value={project.image}
+              suggestedSize="1600 × 1200 px (4:3)"
+              onChange={(image) => onChange({ ...project, image })}
+            />
           </Field>
         </div>
       </section>
@@ -170,10 +179,11 @@ export default function ProjectEditor({
               <TextInput value={caseStudy.label} onChange={(label) => patchCase({ label })} />
             </Field>
           </div>
-          <Field label="hero image">
+          <Field label="hero image" hint="top banner of the case study (suggested: 1920 × 1080 px • 16:9)">
             <ImageInput
               value={caseStudy.hero}
               aspect="aspect-[16/9]"
+              suggestedSize="1920 × 1080 px (16:9)"
               onChange={(hero) => patchCase({ hero })}
             />
           </Field>

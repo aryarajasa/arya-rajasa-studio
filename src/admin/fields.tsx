@@ -96,11 +96,13 @@ export function ImageInput({
   onChange,
   onRemove,
   aspect = 'aspect-[4/3]',
+  suggestedSize,
 }: {
   value: string;
   onChange: (path: string) => void;
   onRemove?: () => void;
   aspect?: string;
+  suggestedSize?: string;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -127,7 +129,7 @@ export function ImageInput({
   return (
     <div className="flex flex-col gap-2">
       <div
-        className={`${aspect} w-full bg-neutral-100 border border-neutral-200 overflow-hidden relative`}
+        className={`${aspect} w-full bg-neutral-100 border border-neutral-200 overflow-hidden relative group`}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -136,10 +138,22 @@ export function ImageInput({
         }}
       >
         {value ? (
-          <img src={previewSrc(value)} alt="" className="w-full h-full object-cover" />
+          <>
+            <img src={previewSrc(value)} alt="" className="w-full h-full object-cover" />
+            {suggestedSize && (
+              <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                {suggestedSize}
+              </div>
+            )}
+          </>
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-xs text-neutral-400">
-            drop an image here
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 p-4 text-center">
+            <span className="text-xs text-neutral-400">drop an image here</span>
+            {suggestedSize && (
+              <span className="text-[11px] text-neutral-500 font-mono border border-dashed border-neutral-300 px-2 py-0.5 rounded bg-white/80">
+                suggested: {suggestedSize}
+              </span>
+            )}
           </div>
         )}
         {busy && (
@@ -149,22 +163,29 @@ export function ImageInput({
         )}
       </div>
 
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="border border-neutral-300 px-2 py-1 text-xs hover:bg-neutral-100"
-          onClick={() => fileRef.current?.click()}
-        >
-          upload
-        </button>
-        {onRemove && (
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            className="border border-neutral-300 px-2 py-1 text-xs hover:bg-neutral-100 text-red-600"
-            onClick={onRemove}
+            className="border border-neutral-300 px-2 py-1 text-xs hover:bg-neutral-100 cursor-pointer"
+            onClick={() => fileRef.current?.click()}
           >
-            remove
+            upload
           </button>
+          {onRemove && (
+            <button
+              type="button"
+              className="border border-neutral-300 px-2 py-1 text-xs hover:bg-neutral-100 text-red-600 cursor-pointer"
+              onClick={onRemove}
+            >
+              remove
+            </button>
+          )}
+        </div>
+        {suggestedSize && (
+          <span className="text-[11px] text-neutral-400 font-mono">
+            {suggestedSize}
+          </span>
         )}
         <input
           ref={fileRef}
@@ -210,7 +231,7 @@ export function IconButton({
       title={title}
       disabled={disabled}
       onClick={onClick}
-      className={`border border-neutral-300 px-2 py-1 text-xs disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 ${
+      className={`border border-neutral-300 px-2 py-1 text-xs disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 cursor-pointer ${
         danger ? 'text-red-600' : 'text-neutral-700'
       }`}
     >
